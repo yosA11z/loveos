@@ -9,7 +9,7 @@ let currentProfile = null   // fila profiles del usuario
 let partnerProfile = null   // fila profiles de la pareja
 
 let appSettings = {
-    city1: 'Cali', city2: 'Facatativá',
+    city1: 'Facatativá', city2: 'Cali',
     startDate: '', lang: 'es',
     darkTheme: false, notifications: true,
 }
@@ -112,8 +112,8 @@ async function loadProfile() {
 
     // Cargar estado de ánimo de la pareja y clima
     if (partnerProfile) loadPartnerMood()
-    fetchWeather(appSettings.city1, 'weather-card-1')
-    fetchWeather(appSettings.city2, 'weather-card-2')
+    fetchWeather(appSettings.city2, 'weather-card-1')
+    fetchWeather(appSettings.city1, 'weather-card-2')
 }
 
 /* ─────────────────────────────────────────
