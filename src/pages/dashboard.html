@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoveOS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Tiempos+Headline:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../styles/dashboard.css">
+</head>
+
+<body class="p-4 md:p-8">
+
+    <!-- Modal Agregar Estado -->
+    <div id="mood-modal" class="modal">
+        <div class="glass p-8 rounded-[32px] w-full max-w-[350px] mx-4 shadow-2xl">
+            <h4 data-i18n="mood-modal-title" class="text-xl font-black text-gray-800 mb-6 italic text-center">Nuevo
+                Estado</h4>
+            <div class="space-y-4">
+                <div>
+                    <label data-i18n="mood-emoji-label"
+                        class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Emoji</label>
+                    <input id="new-mood-emoji" type="text" placeholder="Ej: 😎"
+                        class="w-full bg-white/50 border border-gray-100 rounded-2xl px-5 py-3 text-2xl text-center outline-none">
+                </div>
+                <div>
+                    <label data-i18n="mood-name-label"
+                        class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1 block">Nombre del
+                        estado</label>
+                    <input id="new-mood-name" type="text" data-i18n-placeholder="mood-name-placeholder"
+                        placeholder="Ej: Estudiando"
+                        class="w-full bg-white/50 border border-gray-100 rounded-2xl px-5 py-3 text-sm font-bold outline-none">
+                </div>
+                <div class="flex space-x-3 pt-4">
+                    <button onclick="closeMoodModal()" data-i18n="mood-cancel"
+                        class="flex-1 py-4 rounded-2xl bg-gray-100 text-gray-500 font-black text-xs uppercase tracking-widest">Cancelar</button>
+                    <button onclick="addNewMood()" data-i18n="mood-save"
+                        class="flex-1 py-4 rounded-2xl bg-[#ff4d6d] text-white font-black text-xs uppercase tracking-widest shadow-lg">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Modal -->
+    <div id="language-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="language-modal-title" class="modal-title">Idioma / Language</h3>
+                <button class="close-btn" onclick="closeLanguageModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="language-option selected" onclick="selectLanguage('es', this)">
+                <div class="option-left">
+                    <div class="option-icon" style="background:#ffedd5;">🇪🇸</div>
+                    <div>
+                        <div class="option-label">Español</div>
+                        <div class="option-desc">Spanish</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-check check-icon"></i>
+            </div>
+            <div class="language-option" onclick="selectLanguage('en', this)">
+                <div class="option-left">
+                    <div class="option-icon" style="background:#dbeafe;">🇺🇸</div>
+                    <div>
+                        <div class="option-label">English</div>
+                        <div class="option-desc">United States</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-check check-icon" style="opacity:0;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Modal -->
+    <div id="theme-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="theme-modal-title" class="modal-title">Tema</h3>
+                <button class="close-btn" onclick="closeThemeModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="theme-option selected" onclick="selectTheme('light', this)">
+                <div class="option-left">
+                    <div class="option-icon" style="background:#fef3c7;"><i class="fa-solid fa-sun"></i></div>
+                    <div>
+                        <div data-i18n="theme-light-label" class="option-label">Claro</div>
+                        <div data-i18n="theme-light-desc" class="option-desc">Modo claro por defecto</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-check check-icon"></i>
+            </div>
+            <div class="theme-option" onclick="selectTheme('dark', this)">
+                <div class="option-left">
+                    <div class="option-icon" style="background:#1f2937;color:white;"><i class="fa-solid fa-moon"></i>
+                    </div>
+                    <div>
+                        <div data-i18n="theme-dark-label" class="option-label">Oscuro</div>
+                        <div data-i18n="theme-dark-desc" class="option-desc">Modo oscuro para la noche</div>
+                    </div>
+                </div>
+                <i class="fa-solid fa-check check-icon" style="opacity:0;"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Modal -->
+    <div id="date-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="date-modal-title" class="modal-title">Fecha de inicio</h3>
+                <button class="close-btn" onclick="closeDateModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p data-i18n="date-modal-desc" style="font-size:14px;color:#9ca3af;margin-bottom:20px;">Selecciona el día
+                que comenzaron su historia de amor</p>
+            <input id="relationship-date-input" type="date"
+                style="width:100%;background:#f9fafb;border:1.5px solid #f3f4f6;border-radius:16px;padding:14px 18px;font-family:Outfit,sans-serif;font-size:15px;font-weight:600;color:#1f2937;outline:none;box-sizing:border-box;margin-bottom:20px;"
+                onfocus="this.style.borderColor='#ff4d6d'" onblur="this.style.borderColor='#f3f4f6'">
+            <div style="display:flex;gap:10px;">
+                <button onclick="closeDateModal()" data-i18n="date-cancel"
+                    style="flex:1;padding:14px;border-radius:14px;background:#f3f4f6;border:none;font-family:Outfit,sans-serif;font-weight:700;font-size:14px;color:#6b7280;cursor:pointer;">Cancelar</button>
+                <button onclick="saveRelationshipDate()" data-i18n="date-save"
+                    style="flex:2;padding:14px;border-radius:14px;background:linear-gradient(135deg,#ff4d6d,#7209b7);border:none;font-family:Outfit,sans-serif;font-weight:700;font-size:14px;color:white;cursor:pointer;">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="export-modal-title" class="modal-title">Exportar datos</h3>
+                <button class="close-btn" onclick="closeExportModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <p data-i18n="export-modal-desc" style="font-size:14px;color:#9ca3af;line-height:1.6;margin-bottom:24px;">
+                Descarga un archivo con tus estadísticas y momentos especiales guardados en LoveOS.</p>
+            <div style="display:flex;gap:10px;">
+                <button onclick="closeExportModal()" data-i18n="export-cancel"
+                    style="flex:1;padding:14px;border-radius:14px;background:#f3f4f6;border:none;font-family:Outfit,sans-serif;font-weight:700;font-size:14px;color:#6b7280;cursor:pointer;">Cancelar</button>
+                <button onclick="exportData()"
+                    style="flex:2;padding:14px;border-radius:14px;background:linear-gradient(135deg,#ff4d6d,#7209b7);border:none;font-family:Outfit,sans-serif;font-weight:700;font-size:14px;color:white;cursor:pointer;"><i
+                        class="fa-solid fa-download mr-1"></i> <span data-i18n="export-download">Descargar
+                        JSON</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div id="logout-modal" class="modal">
+        <div class="modal-content" style="text-align:center;">
+            <div
+                style="width:56px;height:56px;background:#fff0f3;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1.4rem;">
+                💔</div>
+            <h4 data-i18n="logout-modal-title"
+                style="font-size:1.1rem;font-weight:900;color:#1f2937;margin-bottom:8px;">¿Cerrar sesión?</h4>
+            <p data-i18n="logout-modal-desc" style="font-size:14px;color:#9ca3af;margin-bottom:24px;line-height:1.5;">Tu
+                información está segura y podrás volver a acceder cuando quieras.</p>
+            <div style="display:flex;gap:10px;">
+                <button onclick="closeLogoutModal()" data-i18n="logout-cancel"
+                    style="flex:1;padding:14px;border-radius:14px;background:#f3f4f6;border:none;font-family:Outfit,sans-serif;font-weight:700;font-size:14px;color:#6b7280;cursor:pointer;">Cancelar</button>
+                <button onclick="doLogout()" data-i18n="logout-confirm"
+                    style="flex:1;padding:14px;border-radius:14px;background:#dc2626;border:none;font-family:Outfit,sans-serif;font-weight:700;font-size:14px;color:white;cursor:pointer;">Salir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="max-w-7xl mx-auto flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl md:text-4xl font-extrabold text-[#ff4d6d]">Love<span class="text-[#7209b7]">OS</span>
+            </h1>
+            <p class="text-sm text-gray-500 font-medium">
+                <span class="status-dot"></span>
+                <span id="view-title" data-i18n="view-title-home">Pareja conectada</span>
+            </p>
+        </div>
+        <div class="flex items-center space-x-3 text-right">
+            <div class="hidden sm:block">
+                <p data-i18n="partner-mood-label"
+                    class="text-[10px] font-black uppercase text-gray-400 italic tracking-tighter">Estado de tu pareja
+                </p>
+                <p id="partner-mood-display" class="text-xs font-bold text-pink-600">...</p>
+            </div>
+            <div class="w-12 h-12 rounded-2xl overflow-hidden border-2 border-white shadow-lg rotate-3">
+                <img id="partner-avatar" src="https://ui-avatars.com/api/?name=Love&background=7209b7&color=fff"
+                    alt="Avatar pareja">
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto">
+
+        <!-- HOME -->
+        <div id="view-home" class="view-section active space-y-6">
+            <div
+                class="card-gradient rounded-[32px] p-8 text-white shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[260px]">
+                <div class="relative z-10 flex justify-between items-start">
+                    <div>
+                        <h2 class="text-xl font-bold opacity-90 text-white italic">Cali - Facatativá</h2>
+                        <p data-i18n="home-building" class="text-xs opacity-70">Construyendo un futuro</p>
+                    </div>
+                    <div
+                        class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-tighter">
+                        <i class="fa-solid fa-star mr-1"></i> <span data-i18n="home-since">Desde el inicio</span>
+                    </div>
+                </div>
+                <div class="relative z-10 my-4 text-center">
+                    <p data-i18n="home-days-label"
+                        class="text-[10px] font-black uppercase tracking-widest opacity-80 mb-1">Días compartidos</p>
+                    <div class="flex justify-center items-baseline space-x-2">
+                        <span class="text-7xl font-black italic tracking-tighter">428</span>
+                        <span data-i18n="home-days-unit"
+                            class="text-2xl font-light opacity-80 uppercase tracking-widest">días</span>
+                    </div>
+                    <p
+                        class="mt-2 text-xs font-bold bg-white/20 inline-block px-4 py-1 rounded-full backdrop-blur-sm italic">
+                        <i class="fa-solid fa-heart mr-2 animate-pulse"></i><span data-i18n="home-every-second">Cada
+                            segundo cuenta</span>
+                    </p>
+                </div>
+                <div
+                    class="relative z-10 flex justify-between text-[10px] font-black uppercase tracking-widest opacity-70">
+                    <div class="flex items-center"><i class="fa-solid fa-clock mr-1"></i> 10,272 Horas</div>
+                    <div class="flex items-center"><i class="fa-solid fa-calendar mr-1"></i> 1 Año y 2 Meses</div>
+                </div>
+                <i class="fa-solid fa-infinity absolute -right-8 -bottom-8 text-white/10 text-[14rem]"></i>
+            </div>
+
+            <section class="space-y-3">
+                <div class="flex justify-between items-center px-2">
+                    <h3 data-i18n="home-how-feel"
+                        class="text-xs font-black uppercase tracking-widest text-gray-400 italic">¿Cómo te sientes hoy?
+                    </h3>
+                    <button onclick="openMoodModal()"
+                        class="w-8 h-8 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center text-pink-500 hover:bg-pink-50 transition-colors">
+                        <i class="fa-solid fa-plus text-xs"></i>
+                    </button>
+                </div>
+                <div id="mood-list" class="flex space-x-3 overflow-x-auto pb-2 scroll-hide">
+                    <div onclick="setMood('✨ Radiante', this)"
+                        class="mood-tag mood-active flex-shrink-0 bg-white border border-gray-100 px-5 py-3 rounded-2xl flex flex-col items-center min-w-[100px]">
+                        <span class="text-2xl mb-1">✨</span>
+                        <span data-i18n="mood-radiante"
+                            class="mood-label text-[10px] font-bold text-gray-700 uppercase tracking-tighter">Radiante</span>
+                    </div>
+                    <div onclick="setMood('🥺 Te extraño', this)"
+                        class="mood-tag flex-shrink-0 bg-white border border-gray-100 px-5 py-3 rounded-2xl flex flex-col items-center min-w-[100px]">
+                        <span class="text-2xl mb-1">🥺</span>
+                        <span data-i18n="mood-extrano"
+                            class="mood-label text-[10px] font-bold text-gray-700 uppercase tracking-tighter">Te
+                            extraño</span>
+                    </div>
+                    <div onclick="setMood('😴 Agotado', this)"
+                        class="mood-tag flex-shrink-0 bg-white border border-gray-100 px-5 py-3 rounded-2xl flex flex-col items-center min-w-[100px]">
+                        <span class="text-2xl mb-1">😴</span>
+                        <span data-i18n="mood-agotado"
+                            class="mood-label text-[10px] font-bold text-gray-700 uppercase tracking-tighter">Agotado</span>
+                    </div>
+                </div>
+            </section>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div id="weather-card-1"
+                    class="glass p-5 rounded-3xl border border-white flex flex-col items-center shadow-sm">
+                    <div
+                        class="w-10 h-10 bg-yellow-100 rounded-full flex items-center justify-center text-yellow-600 mb-2">
+                        <i class="fa-solid fa-sun weather-icon"></i>
+                    </div>
+                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1"
+                        id="weather-city-1">—</p>
+                    <p class="text-xl font-black text-gray-700 weather-temp">...</p>
+                </div>
+                <div id="weather-card-2"
+                    class="bg-blue-50/50 p-5 rounded-3xl border border-blue-100 flex flex-col items-center shadow-sm">
+                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-2">
+                        <i class="fa-solid fa-cloud weather-icon"></i>
+                    </div>
+                    <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest leading-none mb-1"
+                        id="weather-city-2">—</p>
+                    <p class="text-xl font-black text-blue-700 weather-temp">...</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="sendInteraction('te amo')"
+                    class="bg-white p-6 rounded-[28px] shadow-sm border border-gray-100 flex items-center space-x-4 hover:bg-pink-50 transition-all active:scale-95 group">
+                    <div class="w-12 h-12 bg-pink-100 rounded-2xl flex items-center justify-center text-pink-500">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                    </div>
+                    <div class="text-left">
+                        <p data-i18n="zumbido-label" class="text-[10px] font-black text-gray-400 uppercase italic">
+                            Zumbido</p>
+                        <p data-i18n="zumbido-love" class="text-sm font-bold text-gray-700 leading-tight">Mandar un "Te
+                            amo"</p>
+                    </div>
+                </button>
+                <button onclick="sendInteraction('te extraño')"
+                    class="bg-white p-6 rounded-[28px] shadow-sm border border-gray-100 flex items-center space-x-4 hover:bg-blue-50 transition-all active:scale-95 group">
+                    <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center text-blue-500">
+                        <i class="fa-solid fa-envelope-open-text"></i>
+                    </div>
+                    <div class="text-left">
+                        <p data-i18n="zumbido-label" class="text-[10px] font-black text-gray-400 uppercase italic">
+                            Zumbido</p>
+                        <p data-i18n="zumbido-miss" class="text-sm font-bold text-gray-700 leading-tight">Mandar un "Te
+                            extraño"</p>
+                    </div>
+                </button>
+            </div>
+
+            <section class="bg-[#7209b7] rounded-[28px] p-5 text-white shadow-lg relative overflow-hidden">
+                <div class="flex items-center space-x-4 relative z-10">
+                    <div class="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p id="ai-suggestion" class="text-sm font-medium leading-snug">"Si te sientes radiante, envíale
+                            una foto de tu sonrisa ahora mismo."</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- CHAT -->
+        <div id="view-chat" class="view-section">
+            <div class="loveai-shell">
+
+                <!-- Logo central -->
+                <div class="loveai-brand" id="loveai-brand">
+                    <h1 class="loveai-brand-logo">LOVEIA</h1>
+                    <p class="loveai-brand-sub" data-i18n="chat-subtitle">Dr. Love · Consejero de parejas</p>
+                </div>
+
+                <!-- Mensajes -->
+                <div class="loveai-messages" id="chat-box">
+                    <div class="msg-divider"><span>Hoy</span></div>
+                    <div class="msg-row">
+                        <div class="msg-avatar ai-avatar">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12 2C9.5 5.5 8 8 9 11c-2-1-2.5-3-2.5-3C4 11 3 14 3 16c0 4.4 4 8 9 8s9-3.6 9-8c0-5-4-9-9-14zm0 18c-2.8 0-5-1.8-5-4 0-1 .5-2 1.5-3 .3 1 1 2 2 2.5-.2-1.5.5-3 1.5-4 .5 2 2 3 2 4.5 0 .3 0 .5-.1.8.6-.5 1.1-1.2 1.1-2.3.8.8 1 2 1 3 0 1.4-1.8 2.5-4 2.5z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="msg-meta">LoveIA</div>
+                            <div data-i18n="chat-welcome" class="msg-bubble ai">¡Hola! Soy Dr. Love, tu consejero de
+                                pareja. ¿Cómo va todo hoy? ☕ Cuéntame lo que hay en tu corazón.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pills -->
+                <div class="quick-prompts" id="quick-prompts">
+                    <div class="quick-btn" onclick="sendQuick('Siento que nos estamos distanciando')">
+                        <i class="fa-solid fa-heart-crack" style="color:#f87171;"></i>
+                        <span data-i18n="quick-distancing">Nos estamos distanciando</span>
+                    </div>
+                    <div class="quick-btn" onclick="sendQuick('Tuvimos una discusión y no sé cómo arreglarlo')">
+                        <i class="fa-solid fa-handshake" style="color:#60a5fa;"></i>
+                        <span data-i18n="quick-fight">Cómo resolver una pelea</span>
+                    </div>
+                    <div class="quick-btn" onclick="sendQuick('¿Cómo puedo sorprender a mi pareja?')">
+                        <i class="fa-solid fa-gift" style="color:#c084fc;"></i>
+                        <span data-i18n="quick-surprise">Sorprender a mi pareja</span>
+                    </div>
+                </div>
+
+                <!-- Input -->
+                <div class="loveai-input-wrap">
+                    <div class="loveai-input-box">
+                        <textarea id="chat-input" class="loveai-textarea" data-i18n-placeholder="chat-placeholder"
+                            placeholder="Cuéntame lo que sientes..." rows="1" onkeydown="handleChatKey(event)"
+                            oninput="autoResize(this); chatInputChanged(this)"></textarea>
+                        <div class="loveai-input-footer">
+                            <div class="model-selector-container">
+                                <div class="model-selector" id="modelTrigger">
+                                    <span>Q2.5</span>
+                                    <i class="fa-solid fa-chevron-up chevron" style="font-size:10px;"></i>
+                                </div>
+                                <div class="model-dropdown" id="modelDropdown">
+                                    <div class="dropdown-item active">
+                                        <span>Qwen2.5 <span style="font-size:10px;opacity:0.4;margin-left:4px;">(modelo
+                                                local)</span></span>
+                                        <i class="fa-solid fa-check" style="font-size:10px;"></i>
+                                    </div>
+                                    <div class="dropdown-item disabled">Próximamente...</div>
+                                </div>
+                            </div>
+                            <button class="loveai-send-btn" id="send-btn" onclick="sendMessage()">
+                                <i class="fa-solid fa-arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div data-i18n="chat-hint" class="loveai-hint">LoveIA puede cometer errores · Siempre habla con tu
+                        pareja</div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- PELEAS -->
+        <div id="view-fights" class="view-section space-y-5">
+            <div id="fight-initial">
+                <div class="popup-note rounded-2xl p-6 mb-5">
+                    <div class="flex items-start space-x-3 mb-3">
+                        <span class="text-2xl leading-none text-yellow-600"><i class="fa-solid fa-bolt"></i></span>
+                        <div>
+                            <p data-i18n="fight-alert-badge"
+                                class="text-[10px] font-black uppercase tracking-widest text-yellow-700 mb-1">Alerta de
+                                conflicto</p>
+                            <h3 data-i18n="fight-alert-title" class="text-lg font-black text-gray-800 leading-tight">
+                                ¿Sientes que la conversación se está saliendo de control?</h3>
+                        </div>
+                    </div>
+                    <p data-i18n="fight-alert-desc" class="text-sm text-gray-600 leading-relaxed">Antes de decir algo de
+                        lo que te arrepientas, activa el modo anti-peleas.</p>
+                </div>
+                <button onclick="activateAntiFight()"
+                    class="btn-pulse w-full py-6 rounded-[28px] text-white font-black text-base uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center space-x-3"
+                    style="background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); box-shadow: 0 8px 30px rgba(220,38,38,0.4);">
+                    <i class="fa-solid fa-shield-heart text-xl"></i>
+                    <span data-i18n="fight-btn">Modo Anti-Peleas</span>
+                </button>
+            </div>
+
+            <div id="fight-form" class="hidden fight-dark rounded-[32px] overflow-hidden"
+                style="border:1px solid rgba(255,77,109,0.2);">
+                <div class="px-7 pt-7 pb-5 flex items-center justify-between">
+                    <div>
+                        <p data-i18n="fight-protocol-badge"
+                            class="text-[9px] font-black uppercase tracking-widest text-red-400/80 mb-0.5">Protocolo de
+                            paz</p>
+                        <h4 data-i18n="fight-protocol-title" class="text-lg font-black text-white italic">Cuéntame qué
+                            pasó</h4>
+                    </div>
+                    <button onclick="cancelFight()"
+                        class="w-9 h-9 rounded-xl bg-white/8 flex items-center justify-center text-gray-500 hover:text-white transition-colors text-sm">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div class="px-7 pb-7 space-y-5">
+                    <div>
+                        <label data-i18n="fight-why-label"
+                            class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-2 block">¿Por qué te
+                            estás enojando?</label>
+                        <textarea id="f-why" rows="2" data-i18n-placeholder="fight-why-placeholder"
+                            placeholder="Describe qué te hizo enojar..."
+                            class="fight-input w-full rounded-2xl p-4 text-sm resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label data-i18n="fight-what-label"
+                            class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-2 block">¿Qué hizo o
+                            dijo el otro?</label>
+                        <textarea id="f-what" rows="2" data-i18n-placeholder="fight-what-placeholder"
+                            placeholder="Solo hechos, sin interpretar..."
+                            class="fight-input w-full rounded-2xl p-4 text-sm resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label data-i18n="fight-feel-label"
+                            class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-2 block">¿Cómo te
+                            hizo sentir eso?</label>
+                        <textarea id="f-feel" rows="2" data-i18n-placeholder="fight-feel-placeholder"
+                            placeholder="Tus emociones son válidas..."
+                            class="fight-input w-full rounded-2xl p-4 text-sm resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label data-i18n="fight-need-label"
+                            class="text-[9px] font-black uppercase tracking-widest text-gray-500 mb-2 block">¿Qué te
+                            gustaría que el otro hiciera?</label>
+                        <input id="f-need" type="text" data-i18n-placeholder="fight-need-placeholder"
+                            placeholder="Sé específico/a..." class="fight-input w-full rounded-2xl p-4 text-sm">
+                    </div>
+                    <button onclick="submitFight()"
+                        class="w-full py-5 rounded-2xl font-black uppercase tracking-widest text-sm text-white transition-all active:scale-95"
+                        style="background: linear-gradient(135deg, #4cc9f0, #0096c7);">
+                        <i class="fa-solid fa-dove mr-2"></i><span data-i18n="fight-send">Enviar</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="fight-peace" class="hidden rounded-[32px] overflow-hidden text-white text-center"
+                style="background: linear-gradient(160deg, #0a1628 0%, #0d1f3c 100%); border:1.5px solid rgba(76,201,240,0.2); box-shadow: 0 0 40px rgba(76,201,240,0.1);">
+                <div class="p-8">
+                    <p data-i18n="fight-peace-badge"
+                        class="text-[9px] font-black uppercase tracking-widest text-cyan-400/80 mb-4">Protocolo activado
+                    </p>
+                    <h3 data-i18n="fight-peace-title" class="text-2xl font-black mb-2" style="color:#4cc9f0;">Tiempo de
+                        reflexión</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-7">
+                        <span data-i18n="fight-peace-desc">Piensen cada uno la discusión por aparte.</span><br>
+                        <span data-i18n="fight-peace-desc2" class="text-white font-bold">Tómense 15 minutos y vuelvan
+                            para arreglarlo.</span>
+                    </p>
+                    <div class="timer-ring-wrap mb-6">
+                        <svg width="120" height="120" viewBox="0 0 120 120">
+                            <circle class="timer-circle-bg" cx="60" cy="60" r="50" />
+                            <circle class="timer-circle" id="timer-circle" cx="60" cy="60" r="50" />
+                        </svg>
+                        <div class="timer-text">
+                            <span id="timer-display" class="text-3xl font-black" style="color:#4cc9f0;">15:00</span>
+                            <span data-i18n="fight-peace-min"
+                                class="text-[9px] font-black uppercase tracking-widest text-gray-500 mt-1">minutos</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/5 border border-white/8 rounded-2xl p-5 mb-6 text-left space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <div
+                                class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center text-sm bg-cyan-500/15">
+                                1</div>
+                            <p class="text-sm text-gray-300 leading-relaxed"><span data-i18n="fight-step1-bold"
+                                    class="text-white font-bold">Alejense un momento.</span> <span
+                                    data-i18n="fight-step1-text">Nada de mensajes ni pantallas.</span></p>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div
+                                class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center text-sm bg-cyan-500/15">
+                                2</div>
+                            <p class="text-sm text-gray-300 leading-relaxed"><span data-i18n="fight-step2-bold"
+                                    class="text-white font-bold">Piensen</span> <span data-i18n="fight-step2-text">cómo
+                                    se pudo sentir el otro con lo que pasó.</span></p>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div
+                                class="w-8 h-8 rounded-xl flex-shrink-0 flex items-center justify-center text-sm bg-cyan-500/15">
+                                3</div>
+                            <p class="text-sm text-gray-300 leading-relaxed"><span data-i18n="fight-step3-bold"
+                                    class="text-white font-bold">Vuelvan con calma.</span> <span
+                                    data-i18n="fight-step3-text">El objetivo no es ganar, es entenderse.</span></p>
+                        </div>
+                    </div>
+                    <div class="bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-3 mb-6">
+                        <p class="text-xs text-red-300 font-bold italic">
+                            <i class="fa-solid fa-quote-left mr-1 text-[8px]"></i> <span data-i18n="fight-quote">El amor
+                                no es la ausencia de conflicto, sino la voluntad de resolverlo juntos.</span>
+                        </p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button onclick="stopTimer()" id="btn-stop-timer"
+                            class="flex-1 py-4 rounded-2xl font-black uppercase tracking-widest text-xs text-gray-400 bg-white/5 transition-all active:scale-95">
+                            <i class="fa-solid fa-pause mr-1"></i> <span data-i18n="fight-pause">Pausar</span>
+                        </button>
+                        <button onclick="resetFight()"
+                            class="flex-[2] py-4 rounded-2xl font-black uppercase tracking-widest text-sm text-white transition-all active:scale-95"
+                            style="background: linear-gradient(135deg, #4cc9f0, #0096c7);">
+                            <i class="fa-solid fa-heart mr-2"></i><span data-i18n="fight-resolved">Ya hablamos</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fight Report Modal -->
+        <div id="fight-report-modal" class="modal">
+            <div class="modal-content"
+                style="background: linear-gradient(160deg, #0a1628 0%, #0d1f3c 100%); border: 1.5px solid rgba(76,201,240,0.2);">
+                <div class="modal-header">
+                    <h3 data-i18n="fight-report-title" class="modal-title" style="color:#4cc9f0;">💬 Tu pareja necesita
+                        hablar</h3>
+                    <button class="close-btn" onclick="closeFightReportModal()" style="color:#4cc9f0;"><i
+                            class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:14px;margin-top:4px;">
+                    <div>
+                        <p data-i18n="fight-report-why"
+                            style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;margin-bottom:4px;">
+                            ¿Por qué se enojó?</p>
+                        <p id="fr-why" style="font-size:14px;color:#e5e7eb;line-height:1.5;">—</p>
+                    </div>
+                    <div>
+                        <p data-i18n="fight-report-what"
+                            style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;margin-bottom:4px;">
+                            ¿Qué pasó?</p>
+                        <p id="fr-what" style="font-size:14px;color:#e5e7eb;line-height:1.5;">—</p>
+                    </div>
+                    <div>
+                        <p data-i18n="fight-report-feel"
+                            style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;margin-bottom:4px;">
+                            ¿Cómo se sintió?</p>
+                        <p id="fr-feel" style="font-size:14px;color:#e5e7eb;line-height:1.5;">—</p>
+                    </div>
+                    <div>
+                        <p data-i18n="fight-report-need"
+                            style="font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:0.08em;color:#6b7280;margin-bottom:4px;">
+                            ¿Qué necesita?</p>
+                        <p id="fr-need" style="font-size:14px;color:#e5e7eb;line-height:1.5;">—</p>
+                    </div>
+                </div>
+                <button onclick="closeFightReportModal()" data-i18n="fight-report-close"
+                    style="margin-top:24px;width:100%;padding:14px;border-radius:14px;background:linear-gradient(135deg,#4cc9f0,#0096c7);border:none;font-family:Outfit,sans-serif;font-weight:700;font-size:14px;color:white;cursor:pointer;">
+                    Entendido
+                </button>
+            </div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div id="view-settings" class="view-section">
+            <div class="settings-section">
+                <h3 data-i18n="settings-profile-title" class="settings-title">Tu Perfil</h3>
+                <div class="settings-card">
+                    <div class="settings-item" style="cursor:default;">
+                        <div class="settings-item-left">
+                            <div id="settings-avatar-wrap"
+                                style="width:44px;height:44px;border-radius:14px;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,#ff4d6d,#7209b7);">
+                                <img id="settings-avatar"
+                                    src="https://ui-avatars.com/api/?name=Tu+Nombre&background=ff4d6d&color=fff"
+                                    style="width:100%;height:100%;object-fit:cover;" alt="">
+                            </div>
+                            <div>
+                                <div class="settings-label" id="s-name-display">Tu nombre</div>
+                                <div class="settings-value" id="s-partner-display">Pareja</div>
+                            </div>
+                        </div>
+                        <div
+                            style="display:flex;align-items:center;gap:4px;background:#d1fae5;border-radius:20px;padding:4px 10px;">
+                            <i class="fa-solid fa-check" style="color:#10b981;font-size:0.65rem;"></i>
+                            <span data-i18n="settings-sync-badge"
+                                style="font-size:0.6rem;font-weight:800;color:#059669;letter-spacing:0.06em;">SINCRONIZADO</span>
+                        </div>
+                    </div>
+                    <div class="settings-item" style="cursor:default;border-bottom:none;">
+                        <div class="settings-item-left">
+                            <div class="settings-icon purple"><i class="fa-solid fa-location-dot"></i></div>
+                            <div>
+                                <div data-i18n="settings-cities-label" class="settings-label">Ciudades</div>
+                                <div class="settings-value">
+                                    <span id="s-city1-display">—</span> (<span id="s-name-display-city">yo</span>) ·
+                                    <span id="s-city2-display">—</span> (<span
+                                        id="s-partner-display-city">pareja</span>)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3 data-i18n="settings-relation-title" class="settings-title">Tu Relación</h3>
+                <div class="settings-card">
+                    <div class="settings-item" onclick="openDateModal()">
+                        <div class="settings-item-left">
+                            <div class="settings-icon pink"><i class="fa-solid fa-heart"></i></div>
+                            <div>
+                                <div data-i18n="settings-startdate-label" class="settings-label">Fecha de inicio</div>
+                                <div data-i18n="settings-startdate-placeholder" class="settings-value"
+                                    id="settings-date-display">Seleccionar fecha</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right settings-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3 data-i18n="settings-prefs-title" class="settings-title">Preferencias</h3>
+                <div class="settings-card">
+                    <div class="settings-item" onclick="openLanguageModal()">
+                        <div class="settings-item-left">
+                            <div class="settings-icon blue"><i class="fa-solid fa-globe"></i></div>
+                            <div>
+                                <div data-i18n="settings-lang-label" class="settings-label">Idioma</div>
+                                <div class="settings-value" id="current-language">Español</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right settings-arrow"></i>
+                    </div>
+                    <div class="settings-item" onclick="openThemeModal()" style="border-bottom:none;">
+                        <div class="settings-item-left">
+                            <div class="settings-icon orange"><i class="fa-solid fa-palette"></i></div>
+                            <div>
+                                <div data-i18n="settings-theme-label" class="settings-label">Tema</div>
+                                <div class="settings-value" id="current-theme">Claro</div>
+                            </div>
+                        </div>
+                        <i class="fa-solid fa-chevron-right settings-arrow"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section" style="margin-top:8px;">
+                <button data-i18n="settings-logout" class="logout-btn" onclick="confirmLogout()">
+                    <i class="fa-solid fa-right-from-bracket mr-2"></i>Cerrar sesión
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Navigation Dock -->
+    <nav class="dock glass">
+        <button onclick="switchView('home', this)" class="emoji-btn active">
+            <i class="fa-solid fa-house"></i>
+            <span data-i18n="dock-home">Inicio</span>
+        </button>
+        <button onclick="switchView('chat', this)" class="emoji-btn">
+            <i class="fa-solid fa-robot"></i>
+            <span data-i18n="dock-chat">LoveIA</span>
+        </button>
+        <div
+            class="w-14 h-14 bg-gradient-to-tr from-[#ff4d6d] to-[#7209b7] rounded-2xl flex items-center justify-center text-white shadow-xl -mt-12 border-4 border-white rotate-45 hover:rotate-90 transition-transform cursor-pointer">
+            <i class="fa-solid fa-heart text-2xl -rotate-45"></i>
+        </div>
+        <button onclick="switchView('fights', this)" class="emoji-btn relative">
+            <i class="fa-solid fa-handshake-angle"></i>
+            <span data-i18n="dock-fights">Peleas</span>
+            <span id="fights-badge"
+                class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-[9px] font-black text-white items-center justify-center hidden">!</span>
+        </button>
+        <button onclick="switchView('settings', this)" class="emoji-btn">
+            <i class="fa-solid fa-gear"></i>
+            <span data-i18n="dock-settings">Ajustes</span>
+        </button>
+    </nav>
+
+    <script type="module" src="/src/js/dashboard.js"></script>
+</body>
+
+</html>

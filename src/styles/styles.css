@@ -1,0 +1,97 @@
+        :root {
+            --primary: #ff4d6d;
+            /* Rosado */
+            --secondary: #7209b7;
+            /* Morado */
+            --accent: #4cc9f0;
+            /* Azul/Cian */
+            --bg-dark: #1c1917;
+            /* Fondo piedra oscuro */
+            --surface: #292524;
+            /* Superficie */
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: #f5f5f4;
+            scroll-behavior: smooth;
+        }
+
+        .font-headline {
+            font-family: 'Tiempos Headline', serif;
+        }
+
+        .glass-card {
+            background: rgba(41, 37, 36, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-glow {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(114, 9, 183, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            color: white;
+            font-weight: 800;
+        }
+
+        .cta-button:hover {
+            box-shadow: 0 0 30px rgba(255, 77, 109, 0.4);
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        /* Estilo de la interfaz simulada */
+        .chat-ai {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--primary);
+            padding: 12px;
+            border-radius: 4px 16px 16px 16px;
+        }
+
+        .chat-user {
+            background: var(--secondary);
+            padding: 12px;
+            border-radius: 16px 16px 4px 16px;
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 99px;
+            background: rgba(255, 77, 109, 0.1);
+            color: var(--primary);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }

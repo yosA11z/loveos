@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoveOS | Privacidad</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Tiempos+Headline:wght@400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/src/styles/privacidad.css">
+</head>
+
+<body class="antialiased">
+
+    <!-- Navbar Simple -->
+    <nav class="fixed w-full z-50 px-6 top-6">
+        <div class="max-w-4xl mx-auto h-16 glass-card rounded-2xl flex items-center justify-between px-6">
+            <a href="index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                <div
+                    class="w-8 h-8 bg-gradient-to-tr from-[#ff4d6d] to-[#7209b7] rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-heart text-white text-xs"></i>
+                </div>
+                <span class="text-xl font-black uppercase tracking-tight">Love<span
+                        class="text-[#ff4d6d]">OS</span></span>
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="terminos.html"
+                    class="text-[10px] font-bold uppercase tracking-widest text-stone-400 hover:text-white transition-colors">Términos</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="pt-44 pb-16 px-6 text-center">
+        <div class="max-w-3xl mx-auto">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <span class="status-dot"></span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-500">Actualizado: Marzo
+                    2025</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-headline font-bold mb-6">Tu privacidad no es <br><span
+                    class="gradient-text">negociable.</span></h1>
+            <p class="text-stone-400 font-light max-w-xl mx-auto">
+                En LoveOS, creemos que la transparencia es la base de cualquier relación. Aquí te explicamos sin
+                lenguaje legal complejo cómo protegemos tus datos.
+            </p>
+        </div>
+    </header>
+
+    <!-- Contenido Legal -->
+    <main class="max-w-3xl mx-auto px-6 pb-32 legal-content">
+
+        <div class="glass-card p-8 md:p-12 rounded-[2.5rem] border-white/5">
+
+            <section>
+                <h2>1. El compromiso Indie</h2>
+                <p>
+                    A diferencia de las grandes corporaciones, LoveOS es un proyecto independiente. Mi modelo de negocio
+                    no se basa en vender perfiles a anunciantes, sino en crear una experiencia de valor. <strong>Nunca
+                        venderemos tu información personal a terceros.</strong>
+                </p>
+            </section>
+
+            <section>
+                <h2>2. Datos que recolectamos</h2>
+                <p>Para que el algoritmo de afinidad funcione, necesitamos conocerte un poco. Recolectamos:</p>
+                <ul class="space-y-4 mb-6">
+                    <li class="flex gap-4">
+                        <i class="fa-solid fa-user-tag text-[#ff4d6d] mt-1"></i>
+                        <span><strong>Información de Perfil:</strong> Nombre, edad y los intereses que decidas
+                            compartir.</span>
+                    </li>
+                    <li class="flex gap-4">
+                        <i class="fa-solid fa-heart-pulse text-[#7209b7] mt-1"></i>
+                        <span><strong>Datos de Afinidad:</strong> Tus respuestas a los cuestionarios de valores para
+                            conectarte con personas afines.</span>
+                    </li>
+                    <li class="flex gap-4">
+                        <i class="fa-solid fa-message text-[#4cc9f0] mt-1"></i>
+                        <span><strong>Comunicaciones:</strong> Los mensajes son privados. Utilizamos sistemas
+                            automatizados para detectar spam o acoso, pero no para leer tus conversaciones privadas con
+                            fines comerciales.</span>
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>3. Seguridad y Cifrado</h2>
+                <p>
+                    Utilizamos estándares modernos de cifrado (SSL/TLS) para todas las transmisiones de datos. Tu
+                    contraseña se almacena mediante hashing de alta seguridad, lo que significa que ni siquiera yo puedo
+                    verla.
+                </p>
+            </section>
+
+            <section>
+                <h2>4. Tus Derechos</h2>
+                <p>
+                    En cualquier momento puedes solicitar la <strong>eliminación total</strong> de tu cuenta. Al
+                    hacerlo, eliminamos tus datos de nuestros servidores activos en un plazo máximo de 48 horas. No
+                    guardamos "perfiles fantasma" para inflar nuestras métricas.
+                </p>
+        </div>
+
+        <section class="mt-16 text-center">
+            <p class="text-sm italic">¿Tienes dudas sobre cómo manejamos algo específico?</p>
+            <a href="mailto:hola@loveos.dev" class="text-[#ff4d6d] font-bold hover:underline">No me importa</a>
+        </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-white/5 text-center">
+        <div class="max-w-4xl mx-auto px-6">
+            <div
+                class="flex flex-wrap justify-center gap-8 mb-8 text-[10px] font-bold uppercase tracking-widest text-stone-500">
+                <a href="#" class="text-white">Privacidad</a>
+                <a href="/src/pages/terminos.html" class="text-white">Términos</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
